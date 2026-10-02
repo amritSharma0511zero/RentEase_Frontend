@@ -6,6 +6,9 @@ import {
 
 import MainLayout from "../layouts/MainLayout";
 
+import ProtectedRoute from "./ProtectedRoute";
+import RoleBasedRoute from "./RoleBasedRoute";
+
 // Public pages
 import Home from "../pages/public/Home";
 import Properties from "../pages/public/Properties";
@@ -39,12 +42,12 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
 
-        {/* Public Layout */}
-        <Route
-          element={
-            <MainLayout />
-          }
-        >
+        <Route element={<MainLayout />}>
+
+          {/* ==================== */}
+          {/* PUBLIC ROUTES */}
+          {/* ==================== */}
+
           <Route
             path="/"
             element={<Home />}
@@ -70,76 +73,98 @@ const AppRoutes = () => {
             element={<Register />}
           />
 
-          <Route
-            path="/favorites"
-            element={<Favorites />}
-          />
 
-          <Route
-            path="/notifications"
-            element={<Notifications />}
-          />
+          {/* ==================== */}
+          {/* AUTHENTICATED ROUTES */}
+          {/* ==================== */}
 
-          <Route
-            path="/profile"
-            element={<Profile />}
-          />
+          <Route element={<ProtectedRoute />}>
 
-          <Route
-            path="/visit-requests"
-            element={<VisitRequests />}
-          />
+            <Route
+              path="/favorites"
+              element={<Favorites />}
+            />
 
-          <Route
-            path="/owner"
-            element={<OwnerDashboard />}
-          />
+            <Route
+              path="/notifications"
+              element={<Notifications />}
+            />
 
-          <Route
-            path="/owner/properties"
-            element={<MyProperties />}
-          />
+            <Route
+              path="/profile"
+              element={<Profile />}
+            />
 
-          <Route
-            path="/owner/properties/create"
-            element={
-              <CreateProperty />
-            }
-          />
+            <Route
+              path="/visit-requests"
+              element={<VisitRequests />}
+            />
 
-          <Route
-            path="/owner/properties/:id/edit"
-            element={<EditProperty />}
-          />
 
-          <Route
-            path="/owner/requests"
-            element={<OwnerRequests />}
-          />
+            {/* ==================== */}
+            {/* OWNER ROUTES */}
+            {/* ==================== */}
 
-          <Route
-            path="/admin"
-            element={<AdminDashboard />}
-          />
+            <Route element={<RoleBasedRoute allowedRoles={["OWNER"]} />}>
 
-          <Route
-            path="/admin/users"
-            element={<AdminUsers />}
-          />
+              <Route
+                path="/owner"
+                element={<OwnerDashboard />}
+              />
 
-          <Route
-            path="/admin/properties"
-            element={
-              <AdminProperties />
-            }
-          />
+              <Route
+                path="/owner/properties"
+                element={<MyProperties />}
+              />
 
-          <Route
-            path="/admin/approvals"
-            element={
-              <AdminApprovals />
-            }
-          />
+              <Route
+                path="/owner/properties/create"
+                element={<CreateProperty />}
+              />
+
+              <Route
+                path="/owner/properties/:id/edit"
+                element={<EditProperty />}
+              />
+
+              <Route
+                path="/owner/requests"
+                element={<OwnerRequests />}
+              />
+
+            </Route>
+
+
+            {/* ==================== */}
+            {/* ADMIN ROUTES */}
+            {/* ==================== */}
+
+            <Route element={<RoleBasedRoute allowedRoles={["ADMIN"]} />}>
+
+              <Route
+                path="/admin"
+                element={<AdminDashboard />}
+              />
+
+              <Route
+                path="/admin/users"
+                element={<AdminUsers />}
+              />
+
+              <Route
+                path="/admin/properties"
+                element={<AdminProperties />}
+              />
+
+              <Route
+                path="/admin/approvals"
+                element={<AdminApprovals />}
+              />
+
+            </Route>
+
+          </Route>
+
         </Route>
 
       </Routes>
